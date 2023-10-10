@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class UserRequestDtoForFieldUpdate {
+public class UserRequestDtoFieldUpdate {
     @Email(message = "Email must be of valid format")
     @NotEmptyIfPresent(message = "Email must not be empty")
     private String email;

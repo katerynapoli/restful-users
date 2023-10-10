@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.test.restfulusers.dto.request.UserRequestDto;
-import com.test.restfulusers.dto.request.UserRequestDtoForFieldUpdate;
+import com.test.restfulusers.dto.request.UserRequestDtoFieldUpdate;
 import com.test.restfulusers.dto.response.UserResponseDto;
 import com.test.restfulusers.exception.EntityAlreadyExistException;
 import com.test.restfulusers.exception.EntityNotFoundException;
@@ -140,16 +140,16 @@ public class UserServiceTest {
 
     @Test
     void updateByIdPart_Ok() {
-        UserRequestDtoForFieldUpdate userRequestDtoForFieldUpdate =
-                new UserRequestDtoForFieldUpdate();
-        userRequestDtoForFieldUpdate.setEmail(UPDATED_EMAIL);
+        UserRequestDtoFieldUpdate userRequestDtoFieldUpdate =
+                new UserRequestDtoFieldUpdate();
+        userRequestDtoFieldUpdate.setEmail(UPDATED_EMAIL);
 
         when(userRepository.findById(VALID_ID)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
 
         UserResponseDto expectedResponseDto = new UserResponseDto();
         expectedResponseDto.setId(user.getId());
-        expectedResponseDto.setEmail(userRequestDtoForFieldUpdate.getEmail());
+        expectedResponseDto.setEmail(userRequestDtoFieldUpdate.getEmail());
         expectedResponseDto.setFirstName(user.getFirstName());
         expectedResponseDto.setLastName(user.getLastName());
         expectedResponseDto.setBirthDate(user.getBirthDate());
@@ -159,11 +159,11 @@ public class UserServiceTest {
         when(userMapper.toDto(user)).thenReturn(expectedResponseDto);
 
         UserResponseDto actualResponse = userService.updateByIdPart(
-                VALID_ID, userRequestDtoForFieldUpdate);
+                VALID_ID, userRequestDtoFieldUpdate);
 
         assertNotNull(actualResponse);
         assertEquals(user.getId(), actualResponse.getId());
-        assertEquals(userRequestDtoForFieldUpdate.getEmail(), actualResponse.getEmail());
+        assertEquals(userRequestDtoFieldUpdate.getEmail(), actualResponse.getEmail());
     }
 
     @Test

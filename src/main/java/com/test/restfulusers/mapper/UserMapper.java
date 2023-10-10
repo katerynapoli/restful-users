@@ -2,7 +2,7 @@ package com.test.restfulusers.mapper;
 
 import com.test.restfulusers.config.MapperConfig;
 import com.test.restfulusers.dto.request.UserRequestDto;
-import com.test.restfulusers.dto.request.UserRequestDtoForFieldUpdate;
+import com.test.restfulusers.dto.request.UserRequestDtoFieldUpdate;
 import com.test.restfulusers.dto.response.UserResponseDto;
 import com.test.restfulusers.model.User;
 import org.mapstruct.Mapper;
@@ -19,29 +19,29 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    default void updateFromDto(UserRequestDtoForFieldUpdate userRequestDtoForFieldUpdate,
-                       @MappingTarget User user) {
-        if (userRequestDtoForFieldUpdate == null) {
+    default void updateFromDto(UserRequestDtoFieldUpdate userRequestDtoFieldUpdate,
+                               @MappingTarget User user) {
+        if (userRequestDtoFieldUpdate == null) {
             return;
         }
 
-        if (userRequestDtoForFieldUpdate.getEmail() != null) {
-            user.setEmail(userRequestDtoForFieldUpdate.getEmail());
+        if (userRequestDtoFieldUpdate.getEmail() != null) {
+            user.setEmail(userRequestDtoFieldUpdate.getEmail());
         }
-        if (userRequestDtoForFieldUpdate.getFirstName() != null) {
-            user.setFirstName(userRequestDtoForFieldUpdate.getFirstName());
+        if (userRequestDtoFieldUpdate.getFirstName() != null) {
+            user.setFirstName(userRequestDtoFieldUpdate.getFirstName());
         }
-        if (userRequestDtoForFieldUpdate.getLastName() != null) {
-            user.setLastName(userRequestDtoForFieldUpdate.getLastName());
+        if (userRequestDtoFieldUpdate.getLastName() != null) {
+            user.setLastName(userRequestDtoFieldUpdate.getLastName());
         }
-        if (userRequestDtoForFieldUpdate.getBirthDate() != null) {
-            user.setBirthDate(userRequestDtoForFieldUpdate.getBirthDate());
+        if (userRequestDtoFieldUpdate.getBirthDate() != null) {
+            user.setBirthDate(userRequestDtoFieldUpdate.getBirthDate());
         }
-        if (userRequestDtoForFieldUpdate.getAddress() != null) {
-            user.setAddress(userRequestDtoForFieldUpdate.getAddress());
+        if (userRequestDtoFieldUpdate.getAddress() != null) {
+            user.setAddress(userRequestDtoFieldUpdate.getAddress());
         }
-        if (userRequestDtoForFieldUpdate.getPhoneNumber() != null) {
-            user.setPhoneNumber(userRequestDtoForFieldUpdate.getPhoneNumber());
+        if (userRequestDtoFieldUpdate.getPhoneNumber() != null) {
+            user.setPhoneNumber(userRequestDtoFieldUpdate.getPhoneNumber());
         }
     }
 }

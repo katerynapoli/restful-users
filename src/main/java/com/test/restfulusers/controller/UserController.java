@@ -1,7 +1,7 @@
 package com.test.restfulusers.controller;
 
 import com.test.restfulusers.dto.request.UserRequestDto;
-import com.test.restfulusers.dto.request.UserRequestDtoForFieldUpdate;
+import com.test.restfulusers.dto.request.UserRequestDtoFieldUpdate;
 import com.test.restfulusers.dto.response.UserResponseDto;
 import com.test.restfulusers.service.UserService;
 import jakarta.validation.Valid;
@@ -45,9 +45,9 @@ public class UserController {
     @PatchMapping("/{id}")
     public UserResponseDto updateUserByIdPart(@PathVariable Long id,
                                               @RequestBody @Valid
-                                              UserRequestDtoForFieldUpdate
-                                                      userRequestDtoForFieldUpdate) {
-        return userService.updateByIdPart(id, userRequestDtoForFieldUpdate);
+                                              UserRequestDtoFieldUpdate
+                                                      userRequestDtoFieldUpdate) {
+        return userService.updateByIdPart(id, userRequestDtoFieldUpdate);
     }
 
     @PutMapping("/{id}")

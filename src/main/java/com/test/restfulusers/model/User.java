@@ -42,5 +42,5 @@ public class User {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 }
