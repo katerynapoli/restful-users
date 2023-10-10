@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.restfulusers.dto.request.UserRequestDto;
-import com.test.restfulusers.dto.request.UserRequestDtoForFieldUpdate;
+import com.test.restfulusers.dto.request.UserRequestDtoFieldUpdate;
 import com.test.restfulusers.dto.response.UserResponseDto;
 import com.test.restfulusers.service.impl.UserServiceImpl;
 import java.time.LocalDate;
@@ -114,18 +114,18 @@ public class UserControllerTest {
 
     @Test
     void testUpdateUserByIdPart() throws Exception {
-        UserRequestDtoForFieldUpdate userRequestDtoForFieldUpdate =
-                new UserRequestDtoForFieldUpdate();
-        userRequestDtoForFieldUpdate.setEmail(UPDATED_EMAIL);
+        UserRequestDtoFieldUpdate userRequestDtoFieldUpdate =
+                new UserRequestDtoFieldUpdate();
+        userRequestDtoFieldUpdate.setEmail(UPDATED_EMAIL);
 
         userResponseDto.setEmail(UPDATED_EMAIL);
 
-        when(userService.updateByIdPart(anyLong(), any(UserRequestDtoForFieldUpdate.class)))
+        when(userService.updateByIdPart(anyLong(), any(UserRequestDtoFieldUpdate.class)))
                 .thenReturn(userResponseDto);
 
         mockMvc.perform(patch("/users/{id}", VALID_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequestDtoForFieldUpdate)))
+                .content(objectMapper.writeValueAsString(userRequestDtoFieldUpdate)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(VALID_ID))

@@ -1,7 +1,7 @@
 package com.test.restfulusers.service.impl;
 
 import com.test.restfulusers.dto.request.UserRequestDto;
-import com.test.restfulusers.dto.request.UserRequestDtoForFieldUpdate;
+import com.test.restfulusers.dto.request.UserRequestDtoFieldUpdate;
 import com.test.restfulusers.dto.response.UserResponseDto;
 import com.test.restfulusers.exception.EntityAlreadyExistException;
 import com.test.restfulusers.exception.EntityNotFoundException;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto save(UserRequestDto userRequestDto) {
         validateEmailUnique(userRequestDto.getEmail());
         validatePhoneNumberUnique(userRequestDto.getPhoneNumber());
-        checkAge(userRequestDto);
+        checkAge(userRequestDto.getBirthDate());
 
         User user = userMapper.toModel(userRequestDto);
         userRepository.save(user);
@@ -53,19 +53,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponseDto updateByIdPart(
-            Long id, UserRequestDtoForFieldUpdate userRequestDtoForFieldUpdate) {
-        if (userRequestDtoForFieldUpdate.getEmail() != null) {
-            validateEmailUnique(userRequestDtoForFieldUpdate.getEmail());
+            Long id, UserRequestDtoFieldUpdate userRequestDtoFieldUpdate) {
+        if (userRequestDtoFieldUpdate.getEmail() != null) {
+            validateEmailUnique(userRequestDtoFieldUpdate.getEmail());
         }
-        if (userRequestDtoForFieldUpdate.getPhoneNumber() != null) {
-            validatePhoneNumberUnique(userRequestDtoForFieldUpdate.getPhoneNumber());
+        if (userRequestDtoFieldUpdate.getPhoneNumber() != null) {
+            validatePhoneNumberUnique(userRequestDtoFieldUpdate.getPhoneNumber());
         }
-        if (userRequestDtoForFieldUpdate.getBirthDate() != null) {
-            checkAge(userRequestDtoForFieldUpdate);
+        if (userRequestDtoFieldUpdate.getBirthDate() != null) {
+            checkAge(userRequestDtoFieldUpdate.getBirthDate());
         }
 
         User existingUser = findUser(id);
-        userMapper.updateFromDto(userRequestDtoForFieldUpdate, existingUser);
+        userMapper.updateFromDto(userRequestDtoFieldUpdate, existingUser);
         return userMapper.toDto(userRepository.save(existingUser));
     }
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto updateByIdFull(Long id, UserRequestDto userRequestDto) {
         validateEmailUnique(userRequestDto.getEmail());
         validatePhoneNumberUnique(userRequestDto.getPhoneNumber());
-        checkAge(userRequestDto);
+        checkAge(userRequestDto.getBirthDate());
 
         User existingUser = findUser(id);
         User newUser = userMapper.toModel(userRequestDto);
@@ -107,35 +107,22 @@ public class UserServiceImpl implements UserService {
                 () -> new EntityNotFoundException("There is no user with id " + id));
     }
 
-    @Override
-    public void checkAge(UserRequestDto userRequestDto) {
+    private void checkAge(LocalDate birthDate) {
         LocalDate today = LocalDate.now();
-        int age = Period.between(userRequestDto.getBirthDate(), today).getYears();
+        int age = Period.between(birthDate, today).getYears();
 
         if (age < minAge) {
             throw new IllegalArgumentException("You must be at least " + minAge + " years old");
         }
     }
 
-    @Override
-    public void checkAge(UserRequestDtoForFieldUpdate userRequestDtoForFieldUpdate) {
-        LocalDate today = LocalDate.now();
-        int age = Period.between(userRequestDtoForFieldUpdate.getBirthDate(), today).getYears();
-
-        if (age < minAge) {
-            throw new IllegalArgumentException("You must be at least " + minAge + " years old");
-        }
-    }
-
-    @Override
-    public void validateEmailUnique(String email) {
+    private void validateEmailUnique(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new EntityAlreadyExistException("User with email " + email + " already exists");
         }
     }
 
-    @Override
-    public void validatePhoneNumberUnique(String phoneNumber) {
+    private void validatePhoneNumberUnique(String phoneNumber) {
         if (phoneNumber != null && userRepository.findByPhoneNumber(phoneNumber).isPresent()) {
             throw new EntityAlreadyExistException(
                     "User with phone number " + phoneNumber + " already exists");
